@@ -1,10 +1,12 @@
 const express = require('express')
 const cors = require('cors')
-const router = require('./routes')
-const globalErrorHandler = require('./controllers/errorController')
-const app = express()
-const db = require('./config/db')
+
 const AppError = require('./utils/appError')
+const globalErrorHandler = require('./controllers/errorController')
+const router = require('./routes')
+const db = require('./config/db')
+
+const app = express()
 
 app.use(express.json())
 app.use(cors())
@@ -17,6 +19,10 @@ db.connection
     console.log('error in connecting db', err)
   })
 
+app.get('/favico.ico', (req, res) => {
+  res.sendStatus(404)
+})
+
 // ROUTE
 app.use('/api/v1', router)
 
@@ -26,6 +32,6 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler)
 
-const port = process.env.PORT || '5000'
+const PORT = process.env.PORT || 5000
 
-app.listen(port, () => console.log(`listening to port ${port}`))
+app.listen(PORT, () => console.log(`listening to port ${PORT}`))
